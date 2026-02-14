@@ -17,15 +17,15 @@ body {
   align-items:flex-end;
 }
 
-/* Fire fog horizon */
+/* Fire horizon */
 #bar {
   position:absolute;
   bottom:0;
   width:100%;
-  height:230px;
+  height:240px;
   background:
-    radial-gradient(ellipse at center, rgba(255,120,0,0.25) 0%, transparent 70%),
-    linear-gradient(to top, #000 25%, #130500 70%, #2b0c00 100%);
+    radial-gradient(ellipse at center, rgba(255,120,0,0.2) 0%, transparent 70%),
+    linear-gradient(to top, #000 25%, #140600 70%, #2a0c00 100%);
   box-shadow:0 -120px 260px rgba(255,100,0,0.55);
   overflow:hidden;
   display:flex;
@@ -33,57 +33,56 @@ body {
   align-items:center;
 }
 
-/* Fire text */
+/* Text core vs glow */
 h1 {
-  font-size:78px;
-  color:#ffd27a;
+  font-size:80px;
+  color:#ffe29a; /* gold core */
   z-index:3;
-  animation:firePulse 1.2s infinite alternate;
+  animation:firePulse 1.4s infinite alternate;
 }
 
 @keyframes firePulse {
   from {
     text-shadow:
-      0 0 10px #ff6a00,
+      0 0 12px #ff6a00,
       0 0 30px #ff3c00,
-      0 0 60px rgba(255,80,0,0.4);
+      0 0 80px rgba(255,80,0,0.5);
   }
   to {
     text-shadow:
-      0 0 25px #ffb000,
-      0 0 70px #ff3c00,
-      0 0 120px rgba(255,100,0,0.6);
+      0 0 30px #ffb000,
+      0 0 70px #ff2a00,
+      0 0 140px rgba(255,120,0,0.7);
   }
 }
 
-/* ember container */
+/* Ember container */
 #embers {
   position:absolute;
   width:100%;
   height:100%;
-  bottom:0;
 }
 
-/* ember sparks */
+/* Ember sparks */
 .ember {
   position:absolute;
   bottom:-20px;
-  width:2px;
-  height:8px;
-  background:linear-gradient(#ffd27a, #ff5a00);
+  width:3px;
+  height:10px;
+  background:linear-gradient(#ffe29a, #ff5a00);
   border-radius:2px;
-  filter:blur(0.6px);
+  filter:blur(0.5px);
   opacity:0.9;
-  animation:rise linear infinite;
+  animation:rise linear forwards;
 }
 
 @keyframes rise {
   from {
-    transform:translateY(0) scale(1);
+    transform:translate(0, 0) scale(1);
     opacity:1;
   }
   to {
-    transform:translateY(-420px) scale(0.3);
+    transform:translate(var(--drift), -420px) scale(0.3);
     opacity:0;
   }
 }
@@ -105,15 +104,20 @@ function createEmber() {
   e.className = "ember";
 
   e.style.left = Math.random() * 100 + "%";
-  e.style.animationDuration = (1.5 + Math.random() * 3) + "s";
+
+  // random sideways drift
+  const drift = (Math.random() - 0.5) * 200;
+  e.style.setProperty('--drift', drift + "px");
+
+  e.style.animationDuration = (2 + Math.random() * 3) + "s";
   e.style.width = (1 + Math.random() * 3) + "px";
-  e.style.height = (4 + Math.random() * 10) + "px";
+  e.style.height = (5 + Math.random() * 12) + "px";
 
   container.appendChild(e);
-  setTimeout(() => e.remove(), 4500);
+  setTimeout(() => e.remove(), 5000);
 }
 
-setInterval(createEmber, 8);
+setInterval(createEmber, 10);
 </script>
 
 </body>
