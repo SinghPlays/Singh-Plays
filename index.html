@@ -12,6 +12,16 @@ body {
   font-family:'Permanent Marker', cursive;
 }
 
+/* canvas stays BEHIND text */
+canvas {
+  position:fixed;
+  bottom:0;
+  left:0;
+  width:100%;
+  height:100%;
+  z-index:0;
+}
+
 /* logo */
 .logo {
   position:absolute;
@@ -20,13 +30,10 @@ body {
   text-align:center;
   font-size:90px;
   color:white;
-
-  /* slight glow ONLY on text */
-  text-shadow:
-    0 0 6px rgba(255,255,255,0.35),
-    0 0 14px rgba(255,140,0,0.25);
+  z-index:2;
 }
 
+/* border + breathing glow */
 .logo::before {
   content:"Singh Plays";
   position:absolute;
@@ -39,21 +46,34 @@ body {
   z-index:-1;
 }
 
-canvas {
+/* animated border glow */
+.logo::after {
+  content:"Singh Plays";
   position:absolute;
-  bottom:0;
   left:0;
+  top:0;
   width:100%;
-  height:100%;
-  pointer-events:none;
+  text-align:center;
+  color:transparent;
+  -webkit-text-stroke:2px rgba(255,140,0,0.7);
+  filter:blur(4px);
+  animation: pulse 3s ease-in-out infinite;
+  z-index:-2;
+}
+
+/* slow heartbeat glow */
+@keyframes pulse {
+  0%   { opacity:0.1; }
+  50%  { opacity:0.8; }
+  100% { opacity:0.1; }
 }
 </style>
 </head>
 
 <body>
 
-<div class="logo">Singh Plays</div>
 <canvas id="fire"></canvas>
+<div class="logo">Singh Plays</div>
 
 <script>
 const canvas = document.getElementById("fire");
@@ -69,20 +89,20 @@ window.addEventListener("resize", resize);
 let embers = [];
 
 const colors = [
-  "255,153,51",  // saffron
-  "255,255,255", // white
-  "19,136,8"     // green
+  "255,153,51",
+  "255,255,255",
+  "19,136,8"
 ];
 
 function spawn(){
   embers.push({
     x: Math.random()*canvas.width,
-    y: canvas.height,   // start bottom
+    y: canvas.height,
     vx: (Math.random()-0.5)*0.4,
-    vy: -(0.3 + Math.random()*0.4), // faster upward
+    vy: -(0.4 + Math.random()*0.4),
     size: 1 + Math.random()*1.2,
     life: 0,
-    max: 400,
+    max: 500,
     color: colors[Math.floor(Math.random()*3)]
   });
 }
@@ -103,7 +123,6 @@ function draw(){
     ctx.fillStyle = `rgba(${e.color},${a})`;
     ctx.fillRect(e.x, e.y, e.size, e.size*2);
 
-    // remove when off screen top
     if(e.y < -10 || e.life>e.max){
       embers.splice(i,1);
     }
@@ -112,8 +131,7 @@ function draw(){
   requestAnimationFrame(draw);
 }
 
-// more particles
-setInterval(spawn, 25);
+setInterval(spawn, 20);
 
 draw();
 </script>
