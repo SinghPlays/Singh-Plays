@@ -20,6 +20,11 @@ body {
   text-align:center;
   font-size:90px;
   color:white;
+
+  /* subtle glow */
+  text-shadow:
+    0 0 6px rgba(255,255,255,0.35),
+    0 0 18px rgba(255,140,0,0.25);
 }
 
 /* border stroke */
@@ -33,20 +38,6 @@ body {
   -webkit-text-stroke:6px black;
   color:transparent;
   z-index:-1;
-}
-
-/* softer glow */
-.logo::after {
-  content:"Singh Plays";
-  position:absolute;
-  left:0;
-  top:0;
-  width:100%;
-  text-align:center;
-  color:#ff6a00;
-  filter:blur(8px);   /* reduced glow */
-  opacity:0.5;        /* softer */
-  z-index:-2;
 }
 
 canvas {
@@ -72,38 +63,51 @@ canvas.height = 260;
 
 let embers = [];
 
+// Indian flag colors
+const colors = [
+  "255,153,51",  // saffron
+  "255,255,255", // white
+  "19,136,8"     // green
+];
+
 function ember() {
   embers.push({
     x: Math.random()*canvas.width,
     y: canvas.height,
-    vx: (Math.random()-0.5)*0.6,   // slower sideways
-    vy: - (0.2 + Math.random()*0.5), // slower upward
-    size: 1 + Math.random()*1.2,   // smaller particles
+
+    // slower movement
+    vx: (Math.random()-0.5)*0.4,
+    vy: - (0.15 + Math.random()*0.3),
+
+    size: 1 + Math.random()*1.2,
     life: 0,
-    max: 220 + Math.random()*180
+    max: 280 + Math.random()*200,
+
+    color: colors[Math.floor(Math.random()*colors.length)]
   });
 }
 
 function draw() {
   ctx.clearRect(0,0,canvas.width,canvas.height);
 
+  // dim background glow
   let g = ctx.createLinearGradient(0,0,0,canvas.height);
   g.addColorStop(0,"rgba(0,0,0,0)");
-  g.addColorStop(1,"rgba(255,90,0,0.25)");
+  g.addColorStop(1,"rgba(255,90,0,0.10)");
   ctx.fillStyle = g;
   ctx.fillRect(0,0,canvas.width,canvas.height);
 
   for(let i=embers.length-1;i>=0;i--){
     let e = embers[i];
 
-    e.vx += (Math.random()-0.5)*0.05; // gentle turbulence
+    e.vx += (Math.random()-0.5)*0.03;
     e.x += e.vx;
     e.y += e.vy;
     e.life++;
 
     let alpha = 1 - e.life/e.max;
 
-    ctx.fillStyle = `rgba(255,170,70,${alpha})`;
+    ctx.fillStyle = `rgba(${e.color},${alpha})`;
     ctx.fillRect(e.x, e.y, e.size, e.size*2);
 
     if(e.life > e.max) embers.splice(i,1);
@@ -112,7 +116,9 @@ function draw() {
   requestAnimationFrame(draw);
 }
 
-setInterval(ember, 60); // slower spawn rate
+// more particles
+setInterval(ember, 35);
+
 draw();
 </script>
 
