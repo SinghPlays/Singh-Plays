@@ -9,7 +9,7 @@
 body {
   margin:0;
   overflow:hidden;
-  background:#050914;
+  background:#070707;
   font-family:'Permanent Marker', cursive;
   height:100vh;
   display:flex;
@@ -17,14 +17,14 @@ body {
   align-items:flex-end;
 }
 
-/* Bottom gamer bar */
+/* Bottom bar */
 #bar {
   position:absolute;
   bottom:0;
   width:100%;
-  height:180px;
-  background:linear-gradient(to top, #000000, #0a0f1f);
-  box-shadow:0 -30px 80px rgba(255,40,0,0.5);
+  height:200px;
+  background:linear-gradient(to top, #000000, #0d0d0d);
+  box-shadow:0 -40px 120px rgba(255,140,0,0.6);
   display:flex;
   justify-content:center;
   align-items:center;
@@ -33,16 +33,16 @@ body {
 
 /* Brand text */
 h1 {
-  color:white;
-  font-size:72px;
+  color:#ff9a00;
+  font-size:78px;
   letter-spacing:3px;
   z-index:2;
-  animation:fireGlow 1.2s infinite alternate;
+  animation:fireGlow 1s infinite alternate;
 }
 
 @keyframes fireGlow {
-  from { text-shadow:0 0 10px #ff2a00; }
-  to { text-shadow:0 0 60px #ff0000; }
+  from { text-shadow:0 0 10px #ff6a00; }
+  to { text-shadow:0 0 60px #ffae00; }
 }
 
 /* Particle layer */
@@ -54,13 +54,13 @@ h1 {
   left:0;
 }
 
-/* Sparks */
+/* Ember particles */
 .particle {
   position:absolute;
   bottom:-10px;
-  width:5px;
-  height:5px;
-  background:#ff2a00;
+  width:6px;
+  height:6px;
+  background:radial-gradient(circle, #ffd27a, #ff6a00);
   border-radius:50%;
   animation:floatUp linear infinite;
   opacity:0.9;
@@ -72,7 +72,7 @@ h1 {
     opacity:1;
   }
   to {
-    transform:translateY(-260px) scale(0.2);
+    transform:translateY(-320px) scale(0.2);
     opacity:0;
   }
 }
@@ -94,14 +94,15 @@ function createParticle() {
   p.className = "particle";
 
   p.style.left = Math.random() * 100 + "%";
-  p.style.animationDuration = (1 + Math.random() * 2) + "s";
+  p.style.animationDuration = (1 + Math.random() * 2.5) + "s";
+  p.style.width = p.style.height = (3 + Math.random() * 6) + "px";
 
   container.appendChild(p);
 
-  setTimeout(() => p.remove(), 2500);
+  setTimeout(() => p.remove(), 3000);
 }
 
-setInterval(createParticle, 25);
+setInterval(createParticle, 18);
 </script>
 
 </body>
