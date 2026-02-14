@@ -7,43 +7,60 @@
 <style>
 body {
   margin:0;
-  background:#020202;
+  background:#000;
   overflow:hidden;
   font-family:'Permanent Marker', cursive;
+}
+
+/* logo text */
+.logo {
+  position:absolute;
+  bottom:70px;
+  width:100%;
+  text-align:center;
+  font-size:90px;
+  color:white;
+}
+
+/* border stroke */
+.logo::before {
+  content:"Singh Plays";
+  position:absolute;
+  left:0;
+  top:0;
+  width:100%;
+  text-align:center;
+  -webkit-text-stroke:6px black;
+  color:transparent;
+  z-index:-1;
+}
+
+/* softer glow */
+.logo::after {
+  content:"Singh Plays";
+  position:absolute;
+  left:0;
+  top:0;
+  width:100%;
+  text-align:center;
+  color:#ff6a00;
+  filter:blur(8px);   /* reduced glow */
+  opacity:0.5;        /* softer */
+  z-index:-2;
 }
 
 canvas {
   position:absolute;
   bottom:0;
   width:100%;
-  height:240px;
-}
-
-/* text layer */
-h1 {
-  position:absolute;
-  bottom:60px;
-  width:100%;
-  text-align:center;
-  font-size:82px;
-  color:#fff4c2;
-  animation:glow 2s infinite alternate;
-}
-
-@keyframes glow {
-  from {
-    text-shadow:0 0 20px #ff6a00, 0 0 60px #ff3c00;
-  }
-  to {
-    text-shadow:0 0 50px #ffb000, 0 0 120px #ff2a00;
-  }
+  height:260px;
 }
 </style>
 </head>
 
 <body>
 
-<h1>Singh Plays</h1>
+<div class="logo">Singh Plays</div>
 <canvas id="fire"></canvas>
 
 <script>
@@ -51,52 +68,51 @@ const canvas = document.getElementById("fire");
 const ctx = canvas.getContext("2d");
 
 canvas.width = window.innerWidth;
-canvas.height = 240;
+canvas.height = 260;
 
 let embers = [];
 
-function createEmber() {
+function ember() {
   embers.push({
-    x: Math.random() * canvas.width,
+    x: Math.random()*canvas.width,
     y: canvas.height,
-    vx: (Math.random() - 0.5) * 1.2, // sideways drift
-    vy: - (1 + Math.random() * 2),   // upward speed
-    size: 1 + Math.random() * 2,
+    vx: (Math.random()-0.5)*0.6,   // slower sideways
+    vy: - (0.2 + Math.random()*0.5), // slower upward
+    size: 1 + Math.random()*1.2,   // smaller particles
     life: 0,
-    maxLife: 120 + Math.random() * 80
+    max: 220 + Math.random()*180
   });
 }
 
 function draw() {
   ctx.clearRect(0,0,canvas.width,canvas.height);
 
-  // fire haze gradient
-  const g = ctx.createLinearGradient(0,0,0,canvas.height);
+  let g = ctx.createLinearGradient(0,0,0,canvas.height);
   g.addColorStop(0,"rgba(0,0,0,0)");
   g.addColorStop(1,"rgba(255,90,0,0.25)");
   ctx.fillStyle = g;
   ctx.fillRect(0,0,canvas.width,canvas.height);
 
   for(let i=embers.length-1;i>=0;i--){
-    const e = embers[i];
-    e.life++;
+    let e = embers[i];
 
-    // turbulence wobble
-    e.vx += (Math.random()-0.5)*0.05;
+    e.vx += (Math.random()-0.5)*0.05; // gentle turbulence
     e.x += e.vx;
     e.y += e.vy;
+    e.life++;
 
-    // ember color
-    ctx.fillStyle = "rgba(255,180,80," + (1 - e.life/e.maxLife) + ")";
+    let alpha = 1 - e.life/e.max;
+
+    ctx.fillStyle = `rgba(255,170,70,${alpha})`;
     ctx.fillRect(e.x, e.y, e.size, e.size*2);
 
-    if(e.life > e.maxLife) embers.splice(i,1);
+    if(e.life > e.max) embers.splice(i,1);
   }
 
   requestAnimationFrame(draw);
 }
 
-setInterval(createEmber, 40);
+setInterval(ember, 60); // slower spawn rate
 draw();
 </script>
 
