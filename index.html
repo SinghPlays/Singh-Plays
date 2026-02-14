@@ -20,9 +20,11 @@ body {
   text-align:center;
   font-size:90px;
   color:white;
+
+  /* slight glow ONLY on text */
   text-shadow:
-    0 0 8px rgba(255,255,255,0.3),
-    0 0 20px rgba(255,140,0,0.2);
+    0 0 6px rgba(255,255,255,0.35),
+    0 0 14px rgba(255,140,0,0.25);
 }
 
 .logo::before {
@@ -42,7 +44,8 @@ canvas {
   bottom:0;
   left:0;
   width:100%;
-  height:260px;
+  height:100%;
+  pointer-events:none;
 }
 </style>
 </head>
@@ -58,7 +61,7 @@ const ctx = canvas.getContext("2d");
 
 function resize(){
   canvas.width = window.innerWidth;
-  canvas.height = 260;
+  canvas.height = window.innerHeight;
 }
 resize();
 window.addEventListener("resize", resize);
@@ -74,22 +77,18 @@ const colors = [
 function spawn(){
   embers.push({
     x: Math.random()*canvas.width,
-    y: canvas.height,
+    y: canvas.height,   // start bottom
     vx: (Math.random()-0.5)*0.4,
-    vy: -(0.2 + Math.random()*0.3),
+    vy: -(0.3 + Math.random()*0.4), // faster upward
     size: 1 + Math.random()*1.2,
     life: 0,
-    max: 260 + Math.random()*200,
+    max: 400,
     color: colors[Math.floor(Math.random()*3)]
   });
 }
 
 function draw(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
-
-  // dim background haze
-  ctx.fillStyle = "rgba(255,90,0,0.08)";
-  ctx.fillRect(0, canvas.height-80, canvas.width, 80);
 
   for(let i=embers.length-1;i>=0;i--){
     let e = embers[i];
@@ -104,13 +103,18 @@ function draw(){
     ctx.fillStyle = `rgba(${e.color},${a})`;
     ctx.fillRect(e.x, e.y, e.size, e.size*2);
 
-    if(e.life>e.max) embers.splice(i,1);
+    // remove when off screen top
+    if(e.y < -10 || e.life>e.max){
+      embers.splice(i,1);
+    }
   }
 
   requestAnimationFrame(draw);
 }
 
-setInterval(spawn, 30);
+// more particles
+setInterval(spawn, 25);
+
 draw();
 </script>
 
