@@ -2,27 +2,31 @@
 <html>
 <head>
 <title>Singh Plays</title>
-<link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
 
 <style>
-body {
-  margin:0;
-  background:#000;
-  overflow:hidden;
-  font-family:'Permanent Marker', cursive;
+@font-face {
+  font-family: "Quigley";
+  src: url("QuigleyWiggly.ttf");
 }
 
-/* logo text */
+body {
+  margin:0;
+  background:black;
+  overflow:hidden;
+}
+
+/* logo */
 .logo {
   position:absolute;
-  bottom:70px;
+  bottom:90px;
   width:100%;
   text-align:center;
-  font-size:90px;
+  font-family:"Quigley";
+  font-size:110px;
   color:white;
 }
 
-/* border stroke */
+/* crisp border */
 .logo::before {
   content:"Singh Plays";
   position:absolute;
@@ -30,30 +34,18 @@ body {
   top:0;
   width:100%;
   text-align:center;
-  -webkit-text-stroke:6px black;
+  font-family:"Quigley";
+  -webkit-text-stroke:5px black;
   color:transparent;
   z-index:-1;
-}
-
-/* softer glow */
-.logo::after {
-  content:"Singh Plays";
-  position:absolute;
-  left:0;
-  top:0;
-  width:100%;
-  text-align:center;
-  color:#ff6a00;
-  filter:blur(8px);   /* reduced glow */
-  opacity:0.5;        /* softer */
-  z-index:-2;
 }
 
 canvas {
   position:absolute;
   bottom:0;
   width:100%;
-  height:260px;
+  height:220px;
+  background:transparent; /* no fog */
 }
 </style>
 </head>
@@ -68,7 +60,7 @@ const canvas = document.getElementById("fire");
 const ctx = canvas.getContext("2d");
 
 canvas.width = window.innerWidth;
-canvas.height = 260;
+canvas.height = 220;
 
 let embers = [];
 
@@ -76,34 +68,28 @@ function ember() {
   embers.push({
     x: Math.random()*canvas.width,
     y: canvas.height,
-    vx: (Math.random()-0.5)*0.6,   // slower sideways
-    vy: - (0.2 + Math.random()*0.5), // slower upward
-    size: 1 + Math.random()*1.2,   // smaller particles
+    vx: (Math.random()-0.5)*0.4,
+    vy: - (0.2 + Math.random()*0.3),
+    size: 1 + Math.random()*1,
     life: 0,
-    max: 220 + Math.random()*180
+    max: 240 + Math.random()*160
   });
 }
 
 function draw() {
   ctx.clearRect(0,0,canvas.width,canvas.height);
 
-  let g = ctx.createLinearGradient(0,0,0,canvas.height);
-  g.addColorStop(0,"rgba(0,0,0,0)");
-  g.addColorStop(1,"rgba(255,90,0,0.25)");
-  ctx.fillStyle = g;
-  ctx.fillRect(0,0,canvas.width,canvas.height);
-
   for(let i=embers.length-1;i>=0;i--){
     let e = embers[i];
 
-    e.vx += (Math.random()-0.5)*0.05; // gentle turbulence
+    e.vx += (Math.random()-0.5)*0.02;
     e.x += e.vx;
     e.y += e.vy;
     e.life++;
 
     let alpha = 1 - e.life/e.max;
 
-    ctx.fillStyle = `rgba(255,170,70,${alpha})`;
+    ctx.fillStyle = `rgba(255,180,90,${alpha})`;
     ctx.fillRect(e.x, e.y, e.size, e.size*2);
 
     if(e.life > e.max) embers.splice(i,1);
@@ -112,7 +98,7 @@ function draw() {
   requestAnimationFrame(draw);
 }
 
-setInterval(ember, 60); // slower spawn rate
+setInterval(ember, 80);
 draw();
 </script>
 
