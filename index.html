@@ -9,7 +9,7 @@
 body {
   margin:0;
   overflow:hidden;
-  background:#050505;
+  background:#030303;
   font-family:'Permanent Marker', cursive;
   height:100vh;
   display:flex;
@@ -17,60 +17,64 @@ body {
   align-items:flex-end;
 }
 
-/* Ember horizon glow */
+/* Fire fog horizon */
 #bar {
   position:absolute;
   bottom:0;
   width:100%;
-  height:220px;
-  background:linear-gradient(to top, #000000 20%, #120600 60%, #2a0c00 100%);
-  box-shadow:0 -80px 200px rgba(255,120,0,0.45);
+  height:230px;
+  background:
+    radial-gradient(ellipse at center, rgba(255,120,0,0.25) 0%, transparent 70%),
+    linear-gradient(to top, #000 25%, #130500 70%, #2b0c00 100%);
+  box-shadow:0 -120px 260px rgba(255,100,0,0.55);
+  overflow:hidden;
   display:flex;
   justify-content:center;
   align-items:center;
-  overflow:hidden;
 }
 
-/* Brand text — sword gold */
+/* Fire text */
 h1 {
-  font-size:76px;
-  letter-spacing:3px;
+  font-size:78px;
   color:#ffd27a;
-  z-index:2;
-  animation:emberGlow 1.3s infinite alternate;
+  z-index:3;
+  animation:firePulse 1.2s infinite alternate;
 }
 
-@keyframes emberGlow {
+@keyframes firePulse {
   from {
     text-shadow:
-      0 0 10px #ff7a00,
-      0 0 30px #ff3c00;
+      0 0 10px #ff6a00,
+      0 0 30px #ff3c00,
+      0 0 60px rgba(255,80,0,0.4);
   }
   to {
     text-shadow:
-      0 0 30px #ffb000,
-      0 0 80px #ff3c00;
+      0 0 25px #ffb000,
+      0 0 70px #ff3c00,
+      0 0 120px rgba(255,100,0,0.6);
   }
 }
 
-/* particle layer */
-#particles {
+/* ember container */
+#embers {
   position:absolute;
   width:100%;
   height:100%;
+  bottom:0;
 }
 
 /* ember sparks */
-.particle {
+.ember {
   position:absolute;
-  bottom:-10px;
-  width:3px;
-  height:3px;
-  background:radial-gradient(circle, #ffd27a 0%, #ff6a00 60%, transparent 100%);
-  border-radius:50%;
-  animation:rise linear infinite;
+  bottom:-20px;
+  width:2px;
+  height:8px;
+  background:linear-gradient(#ffd27a, #ff5a00);
+  border-radius:2px;
+  filter:blur(0.6px);
   opacity:0.9;
-  filter:blur(0.4px);
+  animation:rise linear infinite;
 }
 
 @keyframes rise {
@@ -79,7 +83,7 @@ h1 {
     opacity:1;
   }
   to {
-    transform:translateY(-380px) scale(0.3);
+    transform:translateY(-420px) scale(0.3);
     opacity:0;
   }
 }
@@ -90,25 +94,26 @@ h1 {
 
 <div id="bar">
   <h1>Singh Plays</h1>
-  <div id="particles"></div>
+  <div id="embers"></div>
 </div>
 
 <script>
-const container = document.getElementById("particles");
+const container = document.getElementById("embers");
 
-function createParticle() {
-  const p = document.createElement("div");
-  p.className = "particle";
+function createEmber() {
+  const e = document.createElement("div");
+  e.className = "ember";
 
-  p.style.left = Math.random() * 100 + "%";
-  p.style.animationDuration = (1.5 + Math.random() * 3) + "s";
-  p.style.width = p.style.height = (2 + Math.random() * 4) + "px";
+  e.style.left = Math.random() * 100 + "%";
+  e.style.animationDuration = (1.5 + Math.random() * 3) + "s";
+  e.style.width = (1 + Math.random() * 3) + "px";
+  e.style.height = (4 + Math.random() * 10) + "px";
 
-  container.appendChild(p);
-  setTimeout(() => p.remove(), 4500);
+  container.appendChild(e);
+  setTimeout(() => e.remove(), 4500);
 }
 
-setInterval(createParticle, 12);
+setInterval(createEmber, 8);
 </script>
 
 </body>
