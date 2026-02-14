@@ -9,7 +9,7 @@
 body {
   margin:0;
   overflow:hidden;
-  background:#030303;
+  background:#020202;
   font-family:'Permanent Marker', cursive;
   height:100vh;
   display:flex;
@@ -24,7 +24,7 @@ body {
   width:100%;
   height:240px;
   background:
-    radial-gradient(ellipse at center, rgba(255,120,0,0.2) 0%, transparent 70%),
+    radial-gradient(ellipse at center, rgba(255,120,0,0.25) 0%, transparent 70%),
     linear-gradient(to top, #000 25%, #140600 70%, #2a0c00 100%);
   box-shadow:0 -120px 260px rgba(255,100,0,0.55);
   overflow:hidden;
@@ -33,58 +33,59 @@ body {
   align-items:center;
 }
 
-/* Text core vs glow */
+/* TEXT: separate core + glow */
 h1 {
-  font-size:80px;
-  color:#ffe29a; /* gold core */
+  font-size:82px;
+  color:#fff4c2; /* gold core */
   z-index:3;
-  animation:firePulse 1.4s infinite alternate;
+  animation:textGlow 2s infinite alternate;
 }
 
-@keyframes firePulse {
+@keyframes textGlow {
   from {
     text-shadow:
-      0 0 12px #ff6a00,
-      0 0 30px #ff3c00,
-      0 0 80px rgba(255,80,0,0.5);
+      0 0 15px #ff6a00,
+      0 0 40px #ff3c00;
   }
   to {
     text-shadow:
-      0 0 30px #ffb000,
-      0 0 70px #ff2a00,
-      0 0 140px rgba(255,120,0,0.7);
+      0 0 40px #ffb000,
+      0 0 100px #ff2a00;
   }
 }
 
-/* Ember container */
+/* ember container */
 #embers {
   position:absolute;
   width:100%;
   height:100%;
 }
 
-/* Ember sparks */
+/* ember spark */
 .ember {
   position:absolute;
   bottom:-20px;
-  width:3px;
-  height:10px;
-  background:linear-gradient(#ffe29a, #ff5a00);
+  width:2px;
+  height:8px;
+  background:linear-gradient(#fff4c2, #ff5a00);
   border-radius:2px;
   filter:blur(0.5px);
   opacity:0.9;
-  animation:rise linear forwards;
+  animation:
+    rise var(--speed) linear forwards,
+    sway var(--speed) ease-in-out infinite alternate;
 }
 
+/* vertical movement */
 @keyframes rise {
-  from {
-    transform:translate(0, 0) scale(1);
-    opacity:1;
-  }
-  to {
-    transform:translate(var(--drift), -420px) scale(0.3);
-    opacity:0;
-  }
+  from { transform:translateY(0) scale(1); opacity:1; }
+  to   { transform:translateY(-420px) scale(0.3); opacity:0; }
+}
+
+/* horizontal wobble */
+@keyframes sway {
+  from { margin-left:-20px; }
+  to   { margin-left:20px; }
 }
 </style>
 </head>
@@ -105,19 +106,19 @@ function createEmber() {
 
   e.style.left = Math.random() * 100 + "%";
 
-  // random sideways drift
-  const drift = (Math.random() - 0.5) * 200;
-  e.style.setProperty('--drift', drift + "px");
+  // slower natural speed
+  const speed = 4 + Math.random() * 4;
+  e.style.setProperty('--speed', speed + "s");
 
-  e.style.animationDuration = (2 + Math.random() * 3) + "s";
   e.style.width = (1 + Math.random() * 3) + "px";
-  e.style.height = (5 + Math.random() * 12) + "px";
+  e.style.height = (4 + Math.random() * 10) + "px";
 
   container.appendChild(e);
-  setTimeout(() => e.remove(), 5000);
+  setTimeout(() => e.remove(), 8000);
 }
 
-setInterval(createEmber, 10);
+// slower spawn = cinematic
+setInterval(createEmber, 30);
 </script>
 
 </body>
