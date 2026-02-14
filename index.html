@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Singh Plays</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
+
+<style>
+body{
+  margin:0;
+  background:black;
+  overflow:hidden;
+}
+
+/* brand text */
+.logo{
+  position:absolute;
+  bottom:110px;
+  width:100%;
+  text-align:center;
+  font-family:'Poppins', sans-serif;
+  font-size:90px;
+  color:white;
+
+  animation:beat 3s ease-in-out infinite;
+}
+
+/* heartbeat */
+@keyframes beat{
+  0%   {transform:scale(1);}
+  10%  {transform:scale(1.06);}
+  20%  {transform:scale(1);}
+  100% {transform:scale(1);}
+}
+
+canvas{
+  position:absolute;
+  bottom:0;
+  width:100%;
+  height:200px;
+  background:black;
+}
+</style>
+</head>
+
+<body>
+
+<div class="logo">Singh Plays</div>
+<canvas id="fire"></canvas>
+
+<script>
+const canvas = document.getElementById("fire");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = 200;
+
+let p = [];
+
+function add(){
+  p.push({
+    x:Math.random()*canvas.width,
+    y:canvas.height,
+    vx:(Math.random()-0.5)*0.3,
+    vy:-0.2-Math.random()*0.2,
+    s:1+Math.random(),
+    life:0,
+    max:260
+  });
+}
+
+function draw(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  for(let i=p.length-1;i>=0;i--){
+    let e=p[i];
+    e.x+=e.vx;
+    e.y+=e.vy;
+    e.life++;
+
+    ctx.fillStyle=`rgba(255,170,90,${1-e.life/e.max})`;
+    ctx.fillRect(e.x,e.y,e.s,e.s);
+
+    if(e.life>e.max)p.splice(i,1);
+  }
+
+  requestAnimationFrame(draw);
+}
+
+setInterval(add,120);
+draw();
+</script>
+
+</body>
+</html>
