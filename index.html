@@ -3,12 +3,9 @@
 <head>
 <title>Singh Plays</title>
 
-<style>
-@font-face {
-  font-family: "Quigley";
-  src: url("./QuigleyWiggly.TTF"); /* match EXACT filename */
-}
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Orbitron:wght@700&display=swap" rel="stylesheet">
 
+<style>
 body {
   margin:0;
   background:black;
@@ -21,23 +18,31 @@ body {
   bottom:90px;
   width:100%;
   text-align:center;
-  font-family:"Quigley";
-  font-size:110px;
+  font-family:'Bebas Neue', sans-serif;
+  font-size:120px;
+  letter-spacing:4px;
   color:white;
+
+  animation:heartbeat 2.5s ease-in-out infinite;
 }
 
-/* crisp border */
-.logo::before {
-  content:"Singh Plays";
-  position:absolute;
-  left:0;
-  top:0;
-  width:100%;
-  text-align:center;
-  font-family:"Quigley";
-  -webkit-text-stroke:5px black;
-  color:transparent;
-  z-index:-1;
+/* subtitle */
+.logo span {
+  font-family:'Orbitron', sans-serif;
+  font-size:40px;
+  letter-spacing:6px;
+  display:block;
+  margin-top:-20px;
+  color:#ffae00;
+}
+
+/* heartbeat animation */
+@keyframes heartbeat {
+  0%   { transform:scale(1); text-shadow:0 0 8px rgba(255,120,0,0.3); }
+  10%  { transform:scale(1.05); text-shadow:0 0 25px rgba(255,120,0,0.7); }
+  20%  { transform:scale(1); }
+  30%  { transform:scale(1.03); text-shadow:0 0 18px rgba(255,120,0,0.5); }
+  100% { transform:scale(1); text-shadow:0 0 8px rgba(255,120,0,0.3); }
 }
 
 canvas {
@@ -52,7 +57,11 @@ canvas {
 
 <body>
 
-<div class="logo">Singh Plays</div>
+<div class="logo">
+  SINGH PLAYS
+  <span>LIVE</span>
+</div>
+
 <canvas id="fire"></canvas>
 
 <script>
